@@ -1,4 +1,5 @@
 import mw_signal_generator
+import photon_detector_digital_inputs
 
 
 start_frequency = 1e8  # Frequency in Hz
