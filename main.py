@@ -2,8 +2,8 @@ import mw_signal_generator
 import photon_detector_digital_inputs
 
 
-start_frequency = 1e8  # Frequency in Hz
-end_frequency = 2e8  # Frequency in Hz
+start_frequency = 2.55e9  # Frequency in Hz
+end_frequency = 3.2e9  # Frequency in Hz
 power_level = 5  # Power level in dBm
 rp_ip = '169.254.211.174'
 

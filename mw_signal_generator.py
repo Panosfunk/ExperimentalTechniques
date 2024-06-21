@@ -28,28 +28,38 @@ def send_signal_to_gen(start_frequency, end_frequency, power_level):
             # Set the timeout to a reasonable value
             socket.timeout = 100000  # in ms
 
-            num_iterations = 20
+            # Example: Turn on the RF output
+            rf_on = socket.write('OUTP ON')
+            print('rf_on: ', rf_on)
+
+            num_iterations = 400
             step = (end_frequency - start_frequency) / num_iterations
-            for sig_increment in range(num_iterations):
-                current_frequency = start_frequency + step * sig_increment
-                freq_values.append(current_frequency)
-                freq_bytes = socket.write(f'FREQ {current_frequency}')
-                print(sig_increment, 'freq_bytes: ', freq_bytes)
 
-                pow_bytes = socket.write(f'AMPR {power_level}')
-                print(sig_increment, 'pow_bytes: ', pow_bytes)
+            file_path = f'{start_frequency/10**9}-{end_frequency/10**9} GHz frequency_voltage_data.txt'
 
-                # Example: Turn on the RF output
-                rf_on = socket.write('OUTP ON')
-                print(sig_increment, 'rf_on: ', rf_on)
-                socket.write('*WAI')
+            with open(file_path, 'w') as file:
+                file.write('Frequency(Hz), Voltage(V)\n')
 
-                voltage_values.append(photon_detector_digital_inputs.get_digital_input(rp_ip))
+                for sig_increment in range(num_iterations):
+                    current_frequency = start_frequency + step * sig_increment
+                    freq_values.append(current_frequency)
+                    freq_bytes = socket.write(f'FREQ {current_frequency}')
+                    print(sig_increment, 'freq_bytes: ', freq_bytes)
+
+                    pow_bytes = socket.write(f'AMPR {power_level}')
+                    print(sig_increment, 'pow_bytes: ', pow_bytes)
+
+                    socket.write('*WAI')
+                    current_voltage = photon_detector_digital_inputs.get_digital_input(rp_ip)
+
+                    file.write(f'{current_frequency/10**9}, {current_voltage/10**9}\n')
+                    voltage_values.append(current_voltage)
 
             plt.plot(freq_values, voltage_values)
             plt.title('Voltage vs Frequency')
             plt.xlabel('Frequency (Hz)')
             plt.ylabel('Voltage (V)')
+            # plt.ylim(0, 0.02)
             plt.show()
 
             socket.close()

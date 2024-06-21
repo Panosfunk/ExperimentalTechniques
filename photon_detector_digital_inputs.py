@@ -3,7 +3,6 @@ import numpy as np
 import matplotlib.pyplot as plot
 
 
-
 def get_digital_input(ip_address):
     rp_s = scpi.scpi(ip_address)
 
@@ -25,13 +24,15 @@ def get_digital_input(ip_address):
 
     while 1:
         rp_s.tx_txt('ACQ:TRig:STAT?')
-        if rp_s.rx_txt() == 'TD':
+        status = rp_s.rx_txt()  # either WAIT or TD
+        if status == 'TD':
             break
 
     # ! OS 2.00 or higher only ! #
     while 1:
         rp_s.tx_txt('ACQ:TRig:FILL?')
-        if rp_s.rx_txt() == '1':
+        is_filled = rp_s.rx_txt()
+        if is_filled == '1':
             break
 
     # function for Data Acquisition
