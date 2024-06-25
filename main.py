@@ -1,13 +1,10 @@
 import mw_signal_generator
-import photon_detector_digital_inputs
 
 
-start_frequency = 2.55e9  # Frequency in Hz
-end_frequency = 3.2e9  # Frequency in Hz
-power_level = 5  # Power level in dBm
+start_frequency = 2.5e9  # Frequency in Hz
+end_frequency = 2.95e9  # Frequency in Hz
+power_level = 2  # Power level in dBm
 rp_ip = '169.254.211.174'
-
-# photon_detector_signal_input.connect_to_pitaya()
 
 freq_values = mw_signal_generator.send_signal_to_gen(
     start_frequency=start_frequency,
@@ -16,11 +13,18 @@ freq_values = mw_signal_generator.send_signal_to_gen(
     # one_shot=False
 )
 
-# mw_signal_generator.send_signal_to_gen(start_frequency, end_frequency, power_level)
-
-# buff = photon_detector_digital_inputs.get_digital_input(rp_ip)
+# import numpy as np
+# import matplotlib.pyplot as plt
 #
-# plot.plot(buff)
-# plot.xlabel('Freq')
-# plot.ylabel('Voltage')
-# plot.show()
+# file_path = '2.5-2.95 GHz frequency_voltage_data.txt'
+# data = np.loadtxt(file_path, delimiter=',', skiprows=1)
+#
+# frequency = data[:, 0]
+# voltage = data[:, 1]
+#
+# plt.plot(frequency, voltage)
+# plt.title('Voltage vs Frequency')
+# plt.xlabel('Frequency (GHz)')
+# plt.ylabel('Voltage (V)')
+# # plt.ylim(0, 0.02)
+# plt.show()
