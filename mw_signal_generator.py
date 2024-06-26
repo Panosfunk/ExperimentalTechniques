@@ -2,6 +2,7 @@ import numpy as np
 import pyvisa
 import photon_detector_digital_inputs
 import matplotlib.pyplot as plt
+import datetime
 
 # Create a resource manager
 rm = pyvisa.ResourceManager()
@@ -11,6 +12,9 @@ pyvisa.log_to_screen()
 generator_ip_address = "169.254.167.111"
 rp_ip = '169.254.211.174'
 port = 5025
+
+now = datetime.datetime.now()
+timestamp = now.strftime("%Y%m%d_%H%M%S")
 
 
 def send_signal_to_gen(start_frequency, end_frequency, power_level):
@@ -34,9 +38,10 @@ def send_signal_to_gen(start_frequency, end_frequency, power_level):
             print('rf_on: ', rf_on)
 
             num_iterations = 200
+            smoothing_iterations = 2
             step = (end_frequency - start_frequency) / num_iterations
 
-            file_path = f'{start_frequency/10**9}-{end_frequency/10**9} GHz frequency_voltage_data.txt'
+            file_path = f'{timestamp} {start_frequency/10**9}-{end_frequency/10**9} GHz frequency_voltage_data.txt'
 
             with open(file_path, 'w') as file:
                 file.write('Frequency(Hz), Voltage(V)\n')
@@ -53,7 +58,7 @@ def send_signal_to_gen(start_frequency, end_frequency, power_level):
                     print(sig_increment, 'pow_bytes: ', pow_bytes)
 
                     socket.write('*WAI')
-                    for i in range(1):
+                    for i in range(smoothing_iterations):
                         current_voltage = photon_detector_digital_inputs.get_digital_input(rp_ip)
                         five_voltage_values_per_freq.append(current_voltage)
 

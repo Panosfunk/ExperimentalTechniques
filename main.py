@@ -2,8 +2,8 @@ import mw_signal_generator
 
 
 start_frequency = 2.5e9  # Frequency in Hz
-end_frequency = 2.95e9  # Frequency in Hz
-power_level = 2  # Power level in dBm
+end_frequency = 3.5e9  # Frequency in Hz
+power_level = 4  # Power level in dBm
 rp_ip = '169.254.211.174'
 
 freq_values = mw_signal_generator.send_signal_to_gen(
@@ -12,6 +12,9 @@ freq_values = mw_signal_generator.send_signal_to_gen(
     power_level=power_level,
     # one_shot=False
 )
+
+# SOMETIMES THE RED PITAYA WAS OVERHEATING SO THE DATA COLLECTION STOPPED. THE CODE BELOW IS USED TO PLOT WHATEVER DATA
+# IS COLLECTED UP UNTIL THAT POINT.
 
 # import numpy as np
 # import matplotlib.pyplot as plt
